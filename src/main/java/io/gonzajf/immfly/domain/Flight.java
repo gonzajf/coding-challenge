@@ -12,4 +12,12 @@ public class Flight {
 	public String getTailNumber() {
 		return tailNumber;
 	}
+
+	public void setFlightNumber(String flightNumber) {
+		this.flightNumber = flightNumber;
+	}
+
+	public void setTailNumber(String tailNumber) {
+		this.tailNumber = tailNumber;
+	}
 }
