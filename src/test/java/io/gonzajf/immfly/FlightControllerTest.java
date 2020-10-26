@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import io.gonzajf.immfly.controller.FlightController;
 import io.gonzajf.immfly.domain.Flight;
+import io.gonzajf.immfly.exception.FlightNotFoundException;
 import io.gonzajf.immfly.service.FlightService;
 
 @ExtendWith(SpringExtension.class)
@@ -41,5 +42,13 @@ public class FlightControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.tailNumber").value("EC-MYT"))
 				.andExpect(jsonPath("$.flightNumber").value("653"));		
+	}
+	
+	@Test
+	public void getFlight_shouldReturnNotFound() throws Exception {
+		given(flightService.getFlightDetails(anyString(), anyString())).willThrow(new FlightNotFoundException());
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/v1/flight-information/EC-MYT/653"))
+				.andExpect(status().isNotFound());
 	}
 }
