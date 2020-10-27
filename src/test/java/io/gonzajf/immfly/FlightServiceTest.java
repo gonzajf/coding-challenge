@@ -3,6 +3,7 @@ package io.gonzajf.immfly;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.gonzajf.immfly.domain.Flight;
 import io.gonzajf.immfly.dto.FlightDTO;
+import io.gonzajf.immfly.exception.FlightNotFoundException;
 import io.gonzajf.immfly.service.FlightService;
 import io.gonzajf.immfly.util.FlightClient;
 
@@ -41,4 +43,14 @@ public class FlightServiceTest {
 		assertThat(flightDetails.getTailNumber()).isEqualTo("EC-MYT");
 		assertThat(flightDetails.getFlightNumber()).isEqualTo("653");
 	}
+	
+	@Test
+	public void getFlight_shouldReturnNotFound() {
+		
+		given(flightClient.getFlightDetails("EC-MYT", "653")).willReturn(null);
+		
+		Assertions.assertThrows(FlightNotFoundException.class, 
+				() -> flightService.getFlightDetails("EC-MYT", "653"));
+	}
+	
 }
