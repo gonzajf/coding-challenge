@@ -1,7 +1,9 @@
 package io.gonzajf.immfly.service;
 
 import io.gonzajf.immfly.domain.Flight;
+import io.gonzajf.immfly.dto.FlightDTO;
 import io.gonzajf.immfly.util.FlightClient;
+import io.gonzajf.immfly.util.FlightMapper;
 
 public class FlightService {
 	
@@ -12,7 +14,8 @@ public class FlightService {
 	}
 
 	public Flight getFlightDetails(String tailNumber, String flightNumber) {
-		return null;
+		FlightDTO fligthDTO = flightClient.getFlightDetails(tailNumber, flightNumber);
+		return FlightMapper.dtoToObject(fligthDTO);
 	}
 
 }
