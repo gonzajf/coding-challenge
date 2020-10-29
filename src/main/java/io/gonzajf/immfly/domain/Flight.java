@@ -1,7 +1,14 @@
 package io.gonzajf.immfly.domain;
 
-public class Flight {
+import java.io.Serializable;
 
+public class Flight implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5965244266367856471L;
+	
 	private String flightNumber;
 	private String tailNumber;
 
