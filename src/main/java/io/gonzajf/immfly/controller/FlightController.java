@@ -2,6 +2,7 @@ package io.gonzajf.immfly.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,16 @@ public class FlightController {
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	private void flightNotFoundHandler(FlightNotFoundException ex) {}
+	private ResponseEntity<String> flightNotFoundHandler(FlightNotFoundException e) {
+		return error(HttpStatus.NOT_FOUND, e);
+	}
 	
+	@ExceptionHandler
+	public ResponseEntity<String> handdleRuntimeException(RuntimeException e) {
+		return error(HttpStatus.INTERNAL_SERVER_ERROR, e);
+	}
+	
+	private ResponseEntity<String> error(HttpStatus status, Exception e) {
+		return ResponseEntity.status(status).body(e.getMessage());
+	}
 }
