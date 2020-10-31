@@ -1,6 +1,7 @@
 package io.gonzajf.immfly;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -10,15 +11,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import io.gonzajf.immfly.dto.FlightDTO;
-import io.gonzajf.immfly.service.FlightService;
 import io.gonzajf.immfly.util.FlightClient;
 
 @Testcontainers
@@ -26,10 +28,10 @@ import io.gonzajf.immfly.util.FlightClient;
 public class CachingTest {
 
 	@Autowired
-	private FlightService service;
+	private FlightClient flightClient;
 
 	@MockBean
-	private FlightClient flightClient;
+	private RestTemplate restTemplate;
 
 	@Container
 	public static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:5.0.3-alpine"))
@@ -58,11 +60,14 @@ public class CachingTest {
 		flight.setTailNumber("EC-MYT");
 		flight.setFlightNumber("653");
 
-		given(flightClient.getFlightDetails(anyString(), anyString())).willReturn(flight);
+		FlightDTO[] f = { flight };
 
-		service.getFlightDetails("EC-MYT", "653");
-		service.getFlightDetails("EC-MYT", "653");
+		given(restTemplate.getForEntity(anyString(), eq(FlightDTO[].class), anyString()))
+				.willReturn(ResponseEntity.ok(f));
 
-		verify(flightClient).getFlightDetails("EC-MYT", "653");
+		flightClient.getFlightDetails("EC-MYT");
+		flightClient.getFlightDetails("EC-MYT");
+
+		verify(restTemplate).getForEntity("http://localhost:8089/v1/flight-information/{tail-number}", FlightDTO[].class, "EC-MYT");
 	}
 }
