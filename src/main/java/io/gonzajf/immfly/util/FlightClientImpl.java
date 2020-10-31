@@ -1,10 +1,9 @@
 package io.gonzajf.immfly.util;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,13 +22,14 @@ public class FlightClientImpl implements FlightClient {
 		this.restTemplate = restTemplate;
 	}
 	
-	public FlightDTO getFlightDetails(String tailNumber, String flightNumber) {
+	@Cacheable(cacheNames = "flight", key="#tailNumber")
+	public FlightDTO[] getFlightDetails(String tailNumber) {
 		
-		FlightDTO[] response = restTemplate.getForObject(baseUrl+"/v1/flight-information/{tail-number}", FlightDTO[].class, tailNumber);
+		ResponseEntity<FlightDTO[]> response = restTemplate.getForEntity(baseUrl+"/v1/flight-information/{tail-number}", FlightDTO[].class, tailNumber);
 		
-		Optional<FlightDTO> flightOptional = Stream.of(response)
-												.filter(f -> f.getFlightNumber().equals(flightNumber)).findFirst();
-		return flightOptional.orElse(null);
+		if(response.getStatusCode().isError()) {
+			throw new RuntimeException("An error occurred while trying to fetch fligths for tailnumber: "+tailNumber);
+		}
+		return response.getBody();
 	}
-
 }

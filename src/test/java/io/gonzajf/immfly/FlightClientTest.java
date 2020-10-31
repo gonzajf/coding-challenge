@@ -5,22 +5,29 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 import io.gonzajf.immfly.dto.FlightDTO;
 import io.gonzajf.immfly.util.FlightClient;
 
-@ExtendWith(SpringExtension.class)
+@Testcontainers
 @SpringBootTest
 public class FlightClientTest {
 
@@ -28,6 +35,26 @@ public class FlightClientTest {
 	private FlightClient flightClient;
 	
     private WireMockServer wireMockServer;    
+    
+    @Container
+	public static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:5.0.3-alpine"))
+			.withExposedPorts(6379);
+
+	@DynamicPropertySource
+	static void postgresqlProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.redis.host", redis::getHost);
+		registry.add("spring.redis.port", redis::getFirstMappedPort);
+	}
+
+	@BeforeClass
+	public void startContainer() {
+		redis.start();
+	}
+
+	@AfterClass
+	public void stopContainer() {
+		redis.stop();
+	}
 	
     @BeforeEach
     void configureSystemUnderTest() {
@@ -39,7 +66,7 @@ public class FlightClientTest {
     }
     
     @Test
-    public void shouldCallWeatherService() throws Exception {
+    public void shouldCallFlightServiceSuccessfully() throws Exception {
        
     	wireMockServer.stubFor(get(urlPathEqualTo("/v1/flight-information/EC-MYT"))
                 .willReturn(aResponse()
@@ -47,7 +74,8 @@ public class FlightClientTest {
                         .withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .withStatus(200)));
 
-        FlightDTO apiResponse = flightClient.getFlightDetails("EC-MYT", "653");
+        FlightDTO[] apiResponse = flightClient.getFlightDetails("EC-MYT");
         assertNotNull(apiResponse);
+        assertEquals("IBB653-1581399936-airline-0136", apiResponse[0].getFaFlightID());
     }
 }

@@ -1,17 +1,24 @@
 package io.gonzajf.immfly.dto;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FlightDTO {
+public class FlightDTO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8320127033858566010L;
+	
 	private String ident;
 	private String faFlightID;
 	private String airline;
 
-	@JsonProperty("airline_data")
-	private String airlineData;
+	@JsonProperty("airline_iata")
+	private String airlineIata;
 	
 	@JsonProperty("flightnumber")
 	private String flightNumber;
@@ -42,11 +49,11 @@ public class FlightDTO {
 	public void setAirline(String airline) {
 		this.airline = airline;
 	}
-	public String getAirlineData() {
-		return airlineData;
+	public String getAirlineIata() {
+		return airlineIata;
 	}
-	public void setAirlineData(String airlineData) {
-		this.airlineData = airlineData;
+	public void setAirlineData(String airlineIata) {
+		this.airlineIata = airlineIata;
 	}
 	public String getFlightNumber() {
 		return flightNumber;

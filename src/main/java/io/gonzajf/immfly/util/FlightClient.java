@@ -4,5 +4,5 @@ import io.gonzajf.immfly.dto.FlightDTO;
 
 public interface FlightClient {
 
-	FlightDTO getFlightDetails(String tailNumber, String flightNumber);
+	FlightDTO[] getFlightDetails(String tailNumber);
 }
