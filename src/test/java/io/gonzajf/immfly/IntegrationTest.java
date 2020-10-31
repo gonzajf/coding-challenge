@@ -62,7 +62,9 @@ public class IntegrationTest {
 		flight.setTailNumber("EC-MYT");
 		flight.setFlightNumber("653");
 		
-		given(flightClient.getFlightDetails(anyString(), anyString())).willReturn(flight);
+		FlightDTO[] f = {flight};
+		
+		given(flightClient.getFlightDetails(anyString())).willReturn(f);
 		
 		ResponseEntity<Flight> response = restTemplate
 				.getForEntity("/v1/flight-information/EC-MYT/653", Flight.class);
