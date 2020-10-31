@@ -3,6 +3,7 @@ package io.gonzajf.immfly;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,9 @@ public class FlightServiceTest {
 		flight.setTailNumber("EC-MYT");
 		flight.setFlightNumber("653");
 		
-		given(flightClient.getFlightDetails("EC-MYT", "653")).willReturn(flight);
+		FlightDTO[] f = {flight};
+		
+		given(flightClient.getFlightDetails("EC-MYT")).willReturn(f);
 		
 		Flight flightDetails = flightService.getFlightDetails("EC-MYT", "653");
 		
@@ -47,7 +50,7 @@ public class FlightServiceTest {
 	@Test
 	public void getFlight_shouldReturnNotFound() {
 		
-		given(flightClient.getFlightDetails("EC-MYT", "653")).willReturn(null);
+		given(flightClient.getFlightDetails("EC-MYT")).willReturn(ArrayUtils.toArray());
 		
 		Assertions.assertThrows(FlightNotFoundException.class, 
 				() -> flightService.getFlightDetails("EC-MYT", "653"));

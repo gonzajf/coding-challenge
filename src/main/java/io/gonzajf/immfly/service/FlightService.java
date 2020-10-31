@@ -1,7 +1,9 @@
 package io.gonzajf.immfly.service;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import io.gonzajf.immfly.domain.Flight;
@@ -20,13 +22,16 @@ public class FlightService {
 		this.flightClient = flieghtClient;
 	}
 
-	@Cacheable(cacheNames = "flight", key="#tailNumber.concat('-').concat(#flightNumber)")
 	public Flight getFlightDetails(String tailNumber, String flightNumber) {
-		FlightDTO fligthDTO = flightClient.getFlightDetails(tailNumber, flightNumber);
-		if(fligthDTO == null) {
+		
+		FlightDTO[] fligthDTO = flightClient.getFlightDetails(tailNumber);
+		
+		Optional<FlightDTO> optionalFlight = Stream.of(fligthDTO)
+				.filter(f -> f.getFlightNumber().equals(flightNumber)).findFirst();
+		
+		if(optionalFlight.isEmpty()) {
 			throw new FlightNotFoundException();
 		}
-		return FlightMapper.dtoToObject(fligthDTO);
+		return FlightMapper.dtoToObject(optionalFlight.get());
 	}
-
 }
