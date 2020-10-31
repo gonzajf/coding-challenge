@@ -1,0 +1,52 @@
+[
+	{
+		"ident": "IBB653",
+		"faFlightID": "IBB653-1581399936-airline-0136",
+		"airline": "IBB",
+		"airline_iata": "NT",
+		"flightnumber": "653",
+		"tailnumber": "EC-MYT",
+		"type": "Form_Airline",
+		"codeshares": "IBE123",
+		"blocked": false,
+		"diverted": false,
+		"cancelled": false,
+		"origin": {
+			"code": "GCXO",
+			"city": "Tenerife",
+			"alternate_ident": "TFN",
+			"airport_name": "TenerifeNorth(LosRodeos)"
+		},
+		"destination": {
+			"code": "GCGM",
+			"city": "LaGomera",
+			"alternate_ident": "GMZ",
+			"airport_name": "LaGomera"
+		}
+	},
+	{
+		"ident": "IBB652",
+		"faFlightID": "IBB652-1581399936-airline-0136",
+		"airline": "IBB",
+		"airline_iata": "NT",
+		"flightnumber": "652",
+		"tailnumber": "EC-MYT",
+		"type": "Form_Airline",
+		"codeshares": "IBE122",
+		"blocked": false,
+		"diverted": false,
+		"cancelled": false,
+		"origin": {
+			"code": "LEMD",
+			"city": "Madrid",
+			"alternate_ident": "MAD",
+			"airport_name": "Adolfo Suárez Madrid-Barajas"
+		},
+		"destination": {
+			"code": "LEBL",
+			"city": "Barcelona",
+			"alternate_ident": "BCN",
+			"airport_name": "Aeropuerto Josep Tarradellas Barcelona-El Prat"
+		}
+	}
+]
