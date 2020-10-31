@@ -55,6 +55,13 @@
 			<version>1.15.0-rc2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<scope>test</scope>
+			<version>2.25.1</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
