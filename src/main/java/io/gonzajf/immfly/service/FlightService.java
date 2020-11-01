@@ -29,7 +29,7 @@ public class FlightService {
 		Optional<FlightDTO> optionalFlight = Stream.of(fligthDTO)
 				.filter(f -> f.getFlightNumber().equals(flightNumber)).findFirst();
 		
-		if(optionalFlight.isEmpty()) {
+		if(!optionalFlight.isPresent()) {
 			throw new FlightNotFoundException();
 		}
 		return FlightMapper.dtoToObject(optionalFlight.get());
