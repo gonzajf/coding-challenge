@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -23,10 +24,12 @@ import org.testcontainers.utility.DockerImageName;
 
 import io.gonzajf.immfly.domain.Flight;
 import io.gonzajf.immfly.dto.FlightDTO;
+import io.gonzajf.immfly.security.Profiles;
 import io.gonzajf.immfly.util.FlightClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Testcontainers
+@ActiveProfiles(Profiles.NO_AUTH)
 public class IntegrationTest {
 
 	@Container

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
@@ -25,10 +26,12 @@ import org.testcontainers.utility.DockerImageName;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 import io.gonzajf.immfly.dto.FlightDTO;
+import io.gonzajf.immfly.security.Profiles;
 import io.gonzajf.immfly.util.FlightClient;
 
 @Testcontainers
 @SpringBootTest
+@ActiveProfiles(Profiles.NO_AUTH)
 public class FlightClientTest {
 
 	@Autowired
