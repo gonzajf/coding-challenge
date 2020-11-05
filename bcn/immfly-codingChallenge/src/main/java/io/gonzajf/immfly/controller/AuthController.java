@@ -1,6 +1,7 @@
 package io.gonzajf.immfly.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import io.gonzajf.immfly.dto.AuthenticationRequest;
 import io.gonzajf.immfly.dto.AuthenticationResponse;
 import io.gonzajf.immfly.security.JwtUtil;
+import io.gonzajf.immfly.security.Profiles;
 import io.gonzajf.immfly.service.MyUserDetailsService;
 
 @RestController
+@Profile(Profiles.JWT_AUTH)
 public class AuthController {
 
 	@Autowired
