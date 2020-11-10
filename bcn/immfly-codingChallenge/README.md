@@ -81,3 +81,14 @@ information of the flights.
   - It will be a good idea to use Docker for the Redis instance. There are a few
 frameworks that you can use, for example, TestContainers.
   - The endpoint can only be used by an admin user.
+
+
+
+# Run the project
+
+At the root of the project execute:  
+
+```sh
+$ docker-compose build
+$ docker-compose up
+```
